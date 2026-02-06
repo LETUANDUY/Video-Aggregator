@@ -13,7 +13,10 @@
             <input type="text" placeholder="Tìm video YouTube, TikTok...">
             <button id="search-btn">Tìm kiếm</button>
         </div>
-        <div class="user-profile">Account</div>
+
+        <div class="user-profile">
+            <button id="login-toggle-btn" onclick="showLoginModal()">Đăng nhập</button>
+        </div>
     </header>
 
     <div class="main-layout">
@@ -51,5 +54,16 @@
         </div>
     </div>    
     <script src="script.js"></script>
+<div id="authModal" class="modal">
+    <div class="modal-content" style="max-width: 400px; padding: 20px;">
+        <span class="close-btn" onclick="closeAuthModal()">&times;</span>
+        <h2 style="color: white; text-align: center;">Đăng nhập hệ thống</h2>
+        <div class="admin-panel" style="margin-top: 0;">
+            <input type="text" id="login-username" placeholder="Tên đăng nhập" name="username">
+            <input type="password" id="login-password" placeholder="Mật khẩu" name="password">
+            <button onclick="handleLogin()">Xác nhận Đăng nhập</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>

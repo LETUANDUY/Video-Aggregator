@@ -75,14 +75,15 @@ function openPlayer(videoId, platform) {
                 allowfullscreen>
             </iframe>`;
     } else if (platform === 'TIKTOK') {
-    // Luôn sử dụng định dạng nhúng v2
+    // Đảm bảo videoId không chứa ký tự lạ
+    const cleanId = videoId.trim();
         embedHtml = `
             <iframe 
-                src="https://www.tiktok.com/embed/v2/${videoId}" 
+                src="https://www.tiktok.com/embed/v2/${cleanId}" 
                 style="width: 100%; height: 750px; border: none;" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                 referrerpolicy="strict-origin-when-cross-origin"
-                 allowfullscreen>
+                allowfullscreen>
             </iframe>`;
     }
 
@@ -116,20 +117,75 @@ searchInput.onkeypress = (e) => { if (e.key === 'Enter') handleSearch(); };
 
 // 7. Xử lý bộ lọc Sidebar (Lọc theo nền tảng)
 document.querySelectorAll('.nav-item').forEach(item => {
-    item.onclick = (e) => {
+    item.addEventListener('click', function(e) {
         e.preventDefault();
-        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-        item.classList.add('active');
 
-        const label = item.innerText.trim();
-        if (label === 'Trang chủ') {
-            loadVideos();
-        } else if (label === 'YouTube' || label === 'TikTok') {
-            // Lưu ý: Cần thêm Endpoint /filter vào Java VideoController để chạy dòng này
-            loadVideos(`http://localhost:8080/api/videos/filter?platform=${label.toUpperCase()}`);
+        // 1. Đổi màu nút được chọn
+        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+        this.classList.add('active');
+
+        // 2. Lấy tên mục vừa bấm
+        const platformName = this.innerText.trim();
+
+        // 3. Logic lọc
+        if (platformName === 'Trang chủ') {
+            loadVideos(); // Gọi hàm lấy tất cả video ban đầu của bạn
+        } else if (platformName === 'YouTube') {
+            fetchFilteredVideos('YOUTUBE');
+        } else if (platformName === 'TikTok') {
+            fetchFilteredVideos('TIKTOK');
+        } else if (platformName === 'Video đã lưu') {
+            // Chức năng này bạn có thể làm sau (lấy từ LocalStorage hoặc DB riêng)
+            alert("Chức năng Video đã lưu đang phát triển!");
         }
-    };
+    });
 });
+
+// Hàm bổ trợ để gọi API lọc
+function fetchFilteredVideos(platform) {
+    fetch(`http://localhost:8080/api/videos/filter?platform=${platform}`)
+        .then(response => response.json())
+        .then(data => {
+            displayVideos(data); // Dùng hàm vẽ video có sẵn của bạn
+        })
+        .catch(error => console.error('Lỗi khi lọc video:', error));
+}
 
 // Chạy lần đầu khi trang web tải xong
 document.addEventListener('DOMContentLoaded', () => loadVideos());
+
+// Hàm hiện khung đăng nhập
+function showLoginModal() {
+    document.getElementById('authModal').style.display = 'block';
+}
+
+// Hàm đóng khung đăng nhập
+function closeAuthModal() {
+    document.getElementById('authModal').style.display = 'none';
+}
+
+// Hàm xử lý gửi dữ liệu đăng nhập tới Spring Boot
+async function handleLogin() {
+    const username = document.getElementById('login-username').value;
+    const password = document.getElementById('login-password').value;
+
+    try {
+        const response = await fetch('http://localhost:8080/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: username, password: password })
+        });
+
+        if (response.ok) {
+            const user = await response.json();
+            alert("Đăng nhập thành công! Chào " + user.username);
+            closeAuthModal();
+            // Cập nhật giao diện sau khi đăng nhập thành công
+            document.querySelector('.user-profile').innerHTML = `<span>${user.username}</span>`;
+        } else {
+            alert("Sai tên đăng nhập hoặc mật khẩu!");
+        }
+    } catch (error) {
+        console.error("Lỗi kết nối:", error);
+    }
+}

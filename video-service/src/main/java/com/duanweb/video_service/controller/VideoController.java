@@ -27,7 +27,14 @@ public class VideoController {
     public List<Video> getAllVideos() {
         return videoRepository.findAll();
     }
-
+    @GetMapping("/filter")
+    public List<Video> filterVideos(@RequestParam String platform) {
+    // Nếu platform là 'ALL' thì trả về tất cả, ngược lại lọc theo tên
+    if (platform.equalsIgnoreCase("ALL")) {
+        return videoRepository.findAll();
+        }
+        return videoRepository.findByPlatformIgnoreCase(platform);
+    }
     @GetMapping("/search")
     @Transactional 
     public List<Video> searchVideos(@RequestParam String query) {
@@ -64,8 +71,8 @@ public class VideoController {
             String tiktokUrl = "https://tiktok-all-in-one-working.p.rapidapi.com/search?keywords=" + query;
             
             HttpHeaders headers = new HttpHeaders();
-            headers.set("1b444beb42msha062986be12a8f3p1363aejsn8976f46a9297", RAPID_API_KEY);
-            headers.set("tiktok-api6.p.rapidapi.com", "tiktok-all-in-one-working.p.rapidapi.com");
+            headers.set("X-RapidAPI-Key", RAPID_API_KEY);
+            headers.set("X-RapidAPI-Host", "tiktok-all-in-one-working.p.rapidapi.com");
             
             HttpEntity<String> entity = new HttpEntity<>(headers);
             ResponseEntity<Map> ttResponse = restTemplate.exchange(tiktokUrl, HttpMethod.GET, entity, Map.class);

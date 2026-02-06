@@ -12,4 +12,6 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
     
     // Rất quan trọng: Kiểm tra xem videoId đã tồn tại chưa để thực hiện lệnh lưu
     boolean existsByVideoId(String videoId);
+    List<Video> findByPlatformIgnoreCase(String platform);
+
 }
