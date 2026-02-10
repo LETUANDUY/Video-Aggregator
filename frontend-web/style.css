@@ -1,0 +1,214 @@
+/* Thiết lập chung */
+:root {
+    --bg-dark: #0f0f0f;
+    --sidebar-bg: #0f0f0f;
+    --card-hover: #272727;
+    --text-main: #ffffff;
+    --text-dim: #aaaaaa;
+    --accent: #ff0000; /* Màu đỏ nổi bật */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+}
+
+/* Header */
+.header {
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    position: sticky;
+    top: 0;
+    background-color: var(--bg-dark);
+    z-index: 1000;
+}
+
+.logo { font-size: 22px; font-weight: bold; cursor: pointer; }
+.logo span { color: var(--accent); }
+
+.search-box { display: flex; width: 40%; }
+.search-box input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 20px 0 0 20px;
+    background: #121212;
+    color: white;
+}
+.search-box button {
+    padding: 0 15px;
+    border-radius: 0 20px 20px 0;
+    border: none;
+    background: #333;
+    color: white;
+    cursor: pointer;
+}
+
+/* Main Layout */
+.main-layout { display: flex; }
+
+/* Sidebar */
+.sidebar {
+    width: 200px;
+    height: calc(100vh - 60px);
+    padding: 15px;
+    position: sticky;
+    top: 60px;
+}
+
+.nav-item {
+    display: block;
+    padding: 12px;
+    text-decoration: none;
+    color: var(--text-main);
+    border-radius: 8px;
+    margin-bottom: 5px;
+}
+
+.nav-item:hover, .nav-item.active { background-color: var(--card-hover); }
+
+/* Video Grid */
+.content-area { flex: 1; padding: 20px; }
+
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+/* Video Card */
+.video-card {
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.thumb-wrapper {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.thumb-wrapper img { width: 100%; display: block; }
+
+.badge {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    padding: 2px 5px;
+    font-size: 11px;
+    font-weight: bold;
+    border-radius: 4px;
+}
+.badge.youtube { background-color: red; }
+.badge.tiktok { background-color: #00f2ea; color: black; }
+
+.video-meta h3 { font-size: 15px; margin: 10px 0 5px 0; line-height: 1.4; }
+.video-meta p { color: var(--text-dim); font-size: 13px; margin: 0; }
+
+/* Nền mờ bao phủ toàn màn hình */
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9); /* Màu đen mờ */
+}
+
+/* Nội dung khung Pop-up */
+.modal-content {
+    position: relative;
+    margin: 5% auto;
+    width: 80%;
+    max-width: 900px;
+    background: #000;
+    border-radius: 10px;
+}
+
+/* Nút đóng (X) */
+.close-btn {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    color: white;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-btn:hover { color: var(--accent); }
+
+/* Hiệu ứng khi focus vào ô tìm kiếm */
+.search-box input:focus {
+    outline: none;
+    border: 1px solid var(--accent);
+    box-shadow: inset 0 0 5px rgba(255, 0, 0, 0.2);
+}
+
+/* Tinh chỉnh Admin Panel trong Sidebar */
+.admin-panel {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #222;
+    border-radius: 12px;
+    background: #161616;
+}
+
+.admin-panel h4 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.admin-panel input, .admin-panel select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    background: #000;
+    border: 1px solid #333;
+    border-radius: 6px;
+    color: white;
+    box-sizing: border-box; /* Đảm bảo không bị tràn khung */
+}
+
+.admin-panel button {
+    width: 100%;
+    padding: 10px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.admin-panel button:hover {
+    background: #cc0000;
+    transform: scale(1.02);
+}
+
+/* Đảm bảo iframe trong modal luôn vừa vặn */
+#player-container iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+}
+
+/* Hiệu ứng cho các nút điều hướng sidebar */
+.nav-item {
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
